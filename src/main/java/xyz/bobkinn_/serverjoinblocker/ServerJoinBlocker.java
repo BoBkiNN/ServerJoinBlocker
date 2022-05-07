@@ -31,6 +31,7 @@ public final class ServerJoinBlocker extends Plugin{
                 FileWriter writer = new FileWriter(switchFile, false);
                 writer.write("//dont redact this file, it is switcher\nTrue");
                 writer.flush();
+                writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,7 +82,7 @@ public final class ServerJoinBlocker extends Plugin{
         }
 
         if (!configuration.contains("kickMsg")){
-            configuration.set("kickMsg", true);
+            configuration.set("kickMsg", "Sorry, you cant join now");
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
             } catch (IOException e) {
