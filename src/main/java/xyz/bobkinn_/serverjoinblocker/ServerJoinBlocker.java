@@ -23,10 +23,12 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
         getLogger().info("Starting...");
         String[] bEnableAliases= {"blockjoinenable","bon"};
         String[] bDisableAliases={"blockjoindisable","boff"};
+        String[] bjReloadAliases={"blockjoinreload","bjr"};
         configLoad();
 
         getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker.enable", bEnableAliases, dataFolder));
         getProxy().getPluginManager().registerCommand(this, new CommandDisable("bdisable","serverjoinblocker.disable", bDisableAliases, dataFolder));
+        getProxy().getPluginManager().registerCommand(this, new CommandReload("bjreload","serverjoinblocker.reload", bjReloadAliases, dataFolder));
         getProxy().getPluginManager().registerListener(this,this);
         getLogger().info("Started!");
     }
@@ -52,7 +54,7 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
     }
 
 
-    private void configLoad() {
+    public void configLoad() {
         if(!getDataFolder().exists()){
             getDataFolder().mkdir();
         }
@@ -108,6 +110,16 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
 
         if (!configuration.contains("kickMsg")){
             configuration.set("kickMsg", "&cSorry, you can`t join now");
+            try {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        if (!configuration.contains("reloadMsg")){
+            configuration.set("reloadMsg", "&aConfiguration reloaded!");
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
             } catch (IOException e) {
