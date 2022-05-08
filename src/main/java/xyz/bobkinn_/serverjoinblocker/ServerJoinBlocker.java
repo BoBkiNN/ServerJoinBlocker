@@ -7,7 +7,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.PreLoginEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
     }
 
     @EventHandler
-    public void onConnect(LoginEvent e) {
+    public void onConnect(PreLoginEvent e) {
         boolean blockEnabled = configuration.getBoolean("blockEnabled");
         String kickMsg = configuration.getString("kickMsg").replace("&","§");
         if (!e.isCancelled()){
