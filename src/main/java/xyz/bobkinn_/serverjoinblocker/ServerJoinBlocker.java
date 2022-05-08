@@ -2,6 +2,7 @@ package xyz.bobkinn_.serverjoinblocker;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.event.PreLoginEvent;
+import net.md_5.bungee.api.event.ProxyReloadEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -17,18 +18,17 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
     public static Configuration configuration;
     public File dataFolder = getDataFolder();
 
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         getLogger().info("Starting...");
         String[] bEnableAliases= {"blockjoinenable","bon"};
         String[] bDisableAliases={"blockjoindisable","boff"};
-        String[] bjReloadAliases={"blockjoinreload","bjr"};
         configLoad();
 
-        getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker.enable", bEnableAliases, dataFolder));
-        getProxy().getPluginManager().registerCommand(this, new CommandDisable("bdisable","serverjoinblocker.disable", bDisableAliases, dataFolder));
-        getProxy().getPluginManager().registerCommand(this, new CommandReload("bjreload","serverjoinblocker.reload", bjReloadAliases, dataFolder));
+        getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker.enable", bEnableAliases));
+        getProxy().getPluginManager().registerCommand(this, new CommandDisable("bdisable","serverjoinblocker.disable", bDisableAliases));
         getProxy().getPluginManager().registerListener(this,this);
         getLogger().info("Started!");
     }
@@ -46,19 +46,24 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
         String kickMsg = configuration.getString("kickMsg").replace("&","§");
 
         if (blockEnabled){
-            e.getConnection().disconnect(new ComponentBuilder (kickMsg).create());
+            e.getConnection().disconnect(new ComponentBuilder(kickMsg).create());
             e.setCancelled(true);
-            e.setCancelReason(new ComponentBuilder (kickMsg).create());
+            e.setCancelReason(new ComponentBuilder(kickMsg).create());
         }
 
     }
 
+    @EventHandler
+    public void onReload(ProxyReloadEvent e){
+        String reloadMsg = configuration.getString("reloadMsg").replace("&","§");
+        configLoad();
+        getLogger().info(reloadMsg);
+    }
 
     public void configLoad() {
         if(!getDataFolder().exists()){
             getDataFolder().mkdir();
         }
-
         configFile = new File(getDataFolder(), "config.yml");
 
         try {

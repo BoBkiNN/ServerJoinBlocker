@@ -2,3 +2,4 @@ name: ServerJoinBlocker
 version: '${project.version}'
 main: xyz.bobkinn_.serverjoinblocker.ServerJoinBlocker
 description: Block server connect with command!
+author: BoBkiNN_
