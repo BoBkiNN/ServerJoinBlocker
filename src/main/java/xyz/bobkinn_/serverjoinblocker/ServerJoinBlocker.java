@@ -12,6 +12,7 @@ import net.md_5.bungee.event.EventHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public final class ServerJoinBlocker extends Plugin implements Listener {
     public static File configFile;
@@ -44,8 +45,9 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
     public void onConnect(PreLoginEvent e) {
         boolean blockEnabled = configuration.getBoolean("blockEnabled");
         String kickMsg = configuration.getString("kickMsg").replace("&","§");
-
-        if (blockEnabled){
+        List<String> allowJoinTo = configuration.getStringList("allowJoinTo");
+        String pName = e.getConnection().getName();
+        if (blockEnabled && !allowJoinTo.contains(pName)){
             e.getConnection().disconnect(new ComponentBuilder(kickMsg).create());
             e.setCancelled(true);
             e.setCancelReason(new ComponentBuilder(kickMsg).create());
@@ -132,6 +134,18 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
             }
 
         }
+
+        if (!configuration.contains("allowJoinTo")){
+            String[] emptyList={};
+            configuration.set("allowJoinTo", emptyList);
+            try {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
         if (!configuration.contains("blockEnabled")){
             configuration.set("blockEnabled", false);
