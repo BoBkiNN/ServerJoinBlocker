@@ -29,7 +29,7 @@ public final class ServerJoinBlocker extends Plugin{
             }
             try {
                 FileWriter writer = new FileWriter(switchFile, false);
-                writer.write("//dont redact this file, it is switcher\nTrue");
+                writer.write("//dont redact this file, it is switcher"+"\n"+"True");
                 writer.flush();
                 writer.close();
             } catch (IOException e) {
