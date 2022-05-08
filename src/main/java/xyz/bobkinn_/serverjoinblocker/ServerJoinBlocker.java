@@ -1,15 +1,18 @@
 package xyz.bobkinn_.serverjoinblocker;
 
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.api.event.LoginEvent;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
-public final class ServerJoinBlocker extends Plugin{
+public final class ServerJoinBlocker extends Plugin implements Listener {
     public static File configFile;
     public static Configuration configuration;
     public File dataFolder = getDataFolder();
@@ -32,7 +35,17 @@ public final class ServerJoinBlocker extends Plugin{
         // Plugin shutdown logic
     }
 
-
+    @EventHandler
+    public void onConnect(LoginEvent e) {
+        boolean blockEnabled = configuration.getBoolean("blockEnabled");
+        String kickMsg = configuration.getString("kickMsg").replace("&","§");
+        if (!e.isCancelled()){
+            if (blockEnabled){
+                e.setCancelled(true);
+                e.setCancelReason(new ComponentBuilder (kickMsg).create());
+            }
+        }
+    }
 
     private void configLoad() {
         if(!getDataFolder().exists()){
@@ -89,7 +102,7 @@ public final class ServerJoinBlocker extends Plugin{
         }
 
         if (!configuration.contains("kickMsg")){
-            configuration.set("kickMsg", "Sorry, you cant join now");
+            configuration.set("kickMsg", "&cSorry, you can`t join now");
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
             } catch (IOException e) {
