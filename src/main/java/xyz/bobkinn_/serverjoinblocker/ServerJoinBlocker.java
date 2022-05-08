@@ -19,26 +19,12 @@ public final class ServerJoinBlocker extends Plugin{
     public void onEnable() {
         // Plugin startup logic
         getLogger().info("[SJB] Starting...");
-        String[] bEnableAliases= {"blockjoinenable"};
+        String[] bEnableAliases= {"blockjoinenable","bon"};
+        String[] bDisableAliases={"blockjoindisable","boff"};
         configLoad();
-//        switchFile = new File(dataFolder, "switch.txt");
-//        if (!switchFile.exists()){
-//            try {
-//                switchFile.createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                FileWriter writer = new FileWriter(switchFile, false);
-//                writer.write("//dont redact this file, it is switcher:"+System.lineSeparator()+"True");
-//                writer.flush();
-//                writer.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
-        getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker", bEnableAliases, dataFolder));
+        getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker.enable", bEnableAliases, dataFolder));
+        getProxy().getPluginManager().registerCommand(this, new CommandDisable("bdisable","serverjoinblocker.disable", bDisableAliases, dataFolder));
     }
 
     @Override
@@ -65,7 +51,7 @@ public final class ServerJoinBlocker extends Plugin{
         }
 
         if (!configuration.contains("enableMsg")){
-            configuration.set("enableMsg", "Joins blocked!");
+            configuration.set("enableMsg", "&cJoins blocked!");
 
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
@@ -74,7 +60,7 @@ public final class ServerJoinBlocker extends Plugin{
             }
         }
         if (!configuration.contains("enableMsgAlready")){
-            configuration.set("enableMsgAlready", "Joins already blocked");
+            configuration.set("enableMsgAlready", "Joins already &cblocked");
 
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
@@ -84,7 +70,7 @@ public final class ServerJoinBlocker extends Plugin{
         }
 
         if (!configuration.contains("disableMsg")){
-            configuration.set("disableMsg", "Joins allowed!");
+            configuration.set("disableMsg", "&aJoins allowed!");
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
             } catch (IOException e) {
@@ -93,7 +79,7 @@ public final class ServerJoinBlocker extends Plugin{
 
         }
         if (!configuration.contains("disableMsgAlready")){
-            configuration.set("disableMsgAlready", "Joins already allowed");
+            configuration.set("disableMsgAlready", "Joins already &aallowed");
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
             } catch (IOException e) {
