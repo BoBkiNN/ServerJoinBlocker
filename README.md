@@ -9,13 +9,13 @@ Plugin that will allow or not allow players connect to BungeeCord
 * Colored messages support
 
 ## Commands
-* /bon - enable block (alias: /blockjoinenable, /benable)
-* /boff - disable block (alias: /blockjoindisable, /bdisable)
-* /greload - will reload BungeeCord, but plugin configuration will be reloaded too
+* `/bon` - enable block (aliases: `/blockjoinenable`, `/benable`)
+* `/boff` - disable block (aliases: `/blockjoindisable`, `/bdisable`)
+* `/greload` - will reload BungeeCord, but plugin configuration will be reloaded too
 
 ## Permissions
-* serverjoinblocker.enable - will allow to enable block
-* serverjoinblocker.disable - will allow to disable block
+* `serverjoinblocker.enable` - will allow to enable block
+* `serverjoinblocker.disable` - will allow to disable block
 
 ## config.yml
 ```yaml
