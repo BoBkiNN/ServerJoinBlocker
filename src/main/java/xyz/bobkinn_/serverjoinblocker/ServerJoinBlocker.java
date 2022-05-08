@@ -13,6 +13,7 @@ public final class ServerJoinBlocker extends Plugin{
     public static File configFile;
     public static Configuration configuration;
     public File dataFolder = getDataFolder();
+    public static File switchFile;
 
     @Override
     public void onEnable() {
@@ -20,22 +21,22 @@ public final class ServerJoinBlocker extends Plugin{
         getLogger().info("[SJB] Starting...");
         String[] bEnableAliases= {"blockjoinenable"};
         configLoad();
-        File switchFile = new File(dataFolder, "switch.txt");
-        if (!switchFile.exists()){
-            try {
-                switchFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                FileWriter writer = new FileWriter(switchFile, false);
-                writer.write("//dont redact this file, it is switcher:"+System.lineSeparator()+"True");
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        switchFile = new File(dataFolder, "switch.txt");
+//        if (!switchFile.exists()){
+//            try {
+//                switchFile.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                FileWriter writer = new FileWriter(switchFile, false);
+//                writer.write("//dont redact this file, it is switcher:"+System.lineSeparator()+"True");
+//                writer.flush();
+//                writer.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker", bEnableAliases, dataFolder));
     }
@@ -44,6 +45,8 @@ public final class ServerJoinBlocker extends Plugin{
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+
 
     private void configLoad() {
         if(!getDataFolder().exists()){
@@ -70,6 +73,15 @@ public final class ServerJoinBlocker extends Plugin{
                 e.printStackTrace();
             }
         }
+        if (!configuration.contains("enableMsgAlready")){
+            configuration.set("enableMsgAlready", "Joins already blocked");
+
+            try {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         if (!configuration.contains("disableMsg")){
             configuration.set("disableMsg", "Joins allowed!");
@@ -80,9 +92,28 @@ public final class ServerJoinBlocker extends Plugin{
             }
 
         }
+        if (!configuration.contains("disableMsgAlready")){
+            configuration.set("disableMsgAlready", "Joins already allowed");
+            try {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
 
         if (!configuration.contains("kickMsg")){
             configuration.set("kickMsg", "Sorry, you cant join now");
+            try {
+                ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        if (!configuration.contains("blockEnabled")){
+            configuration.set("blockEnabled", false);
             try {
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
             } catch (IOException e) {

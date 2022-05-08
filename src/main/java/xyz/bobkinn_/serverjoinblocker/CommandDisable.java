@@ -1,6 +1,5 @@
 package xyz.bobkinn_.serverjoinblocker;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
@@ -10,9 +9,9 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class CommandEnable extends Command{
+public class CommandDisable extends Command{
 
-    public CommandEnable(String name, String permission, String[] aliases, File dataFolder) {
+    public CommandDisable(String name, String permission, String[] aliases, File dataFolder) {
         super(name,permission,aliases);
     }
 
