@@ -13,20 +13,28 @@ import net.md_5.bungee.event.EventHandler;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public final class ServerJoinBlocker extends Plugin implements Listener {
     public static File configFile;
     public static Configuration configuration;
-    public File dataFolder = getDataFolder();
+    public ServerJoinBlocker plugin;
+    public static Logger logger;
 
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        plugin=this;
+        logger=getLogger();
         getLogger().info("Starting...");
         String[] bEnableAliases= {"blockjoinenable","bon"};
         String[] bDisableAliases={"blockjoindisable","boff"};
         configLoad();
+        if (configuration == null){
+            logger.severe("Failed to make configuration, plugin will be disabled");
+            return;
+        }
 
         getProxy().getPluginManager().registerCommand(this, new CommandEnable("benable","serverjoinblocker.enable", bEnableAliases));
         getProxy().getPluginManager().registerCommand(this, new CommandDisable("bdisable","serverjoinblocker.disable", bDisableAliases));
@@ -37,6 +45,7 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        plugin.getProxy().getPluginManager().unregisterCommands(plugin);
         getLogger().info("Disabled!");
     }
 
@@ -64,13 +73,19 @@ public final class ServerJoinBlocker extends Plugin implements Listener {
 
     public void configLoad() {
         if(!getDataFolder().exists()){
-            getDataFolder().mkdir();
+            if (!getDataFolder().mkdir()){
+                logger.severe("Failed to create data folder");
+                return;
+            }
         }
         configFile = new File(getDataFolder(), "config.yml");
 
         try {
             if(!configFile.exists()) {
-                configFile.createNewFile();
+                if (!configFile.createNewFile()){
+                    logger.severe("Failed to create config file");
+                    return;
+                }
             }
             configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
         } catch (IOException e) {

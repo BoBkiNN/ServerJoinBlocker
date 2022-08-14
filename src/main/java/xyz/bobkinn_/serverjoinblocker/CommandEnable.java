@@ -1,5 +1,6 @@
 package xyz.bobkinn_.serverjoinblocker;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
@@ -17,8 +18,8 @@ public class CommandEnable extends Command{
     @Override
     public void execute(CommandSender sender, String[] args) {
         boolean blockEnabled = ServerJoinBlocker.configuration.getBoolean("blockEnabled");
-        String enableMsgAlready = ServerJoinBlocker.configuration.getString("enableMsgAlready").replace("&","§");
-        String enableMsg = ServerJoinBlocker.configuration.getString("enableMsg").replace("&","§");
+        String enableMsgAlready = ChatColor.translateAlternateColorCodes('&',ServerJoinBlocker.configuration.getString("enableMsgAlready"));
+        String enableMsg = ChatColor.translateAlternateColorCodes('&',ServerJoinBlocker.configuration.getString("enableMsg"));
         if (blockEnabled){
             sender.sendMessage( new ComponentBuilder (enableMsgAlready).create());
         } else {
