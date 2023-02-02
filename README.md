@@ -1,4 +1,5 @@
 # ServerJoinBlocker
+[![See on Modrinth - ServerJoinBlocker](https://img.shields.io/badge/See_on_Modrinth-ServerJoinBlocker-2ea44f?logo=modrinth)](https://modrinth.com/plugin/serverjoinblocker)
 
 Plugin that will allow or not allow players connect to BungeeCord
 
